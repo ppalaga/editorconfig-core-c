@@ -1,3 +1,5 @@
+image:
+  - Visual Studio 2017
 
 install:
   - cmake --version
@@ -6,9 +8,11 @@ install:
   - ps: .\init.ps1
   
 build_script:
-  - ps: .\build.ps1 -init
+  - ps: .\build.ps1 -proj pcre -init -install
+  - ps: .\build.ps1 -proj core -init -install
   - ps: .\test.ps1
   
 on_failure:
   - echo "failed"
+  - type C:\projects\editorconfig-core-c\bin\pcre-build.log
   - type Testing\Temporary\LastTest.log

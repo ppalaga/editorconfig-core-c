@@ -1,7 +1,7 @@
 param(
     [ValidateSet("pcre","core")]
     [string] $proj = "core",
-    
+
     [ValidateSet("ON","OFF")]
     [string] $static = "ON",
 
@@ -12,7 +12,7 @@ param(
     [string] $arch = "x64"
 )
 
-$ErrorActionPreference="stop"
+# $ErrorActionPreference="stop"
 
 
 $dest = "bin"

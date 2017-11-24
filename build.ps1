@@ -5,7 +5,7 @@ param(
     [switch] $init,
 
     [switch] $install,
-    
+
     [ValidateSet("ON","OFF")]
     [string] $static = "ON",
 
@@ -14,13 +14,17 @@ param(
 
     [ValidateSet("x86","x64")]
     [string] $arch = "x64",
-    
+
 
     [ValidateSet("15","14","12")]
     [int] $vsver = 15
 )
 
-$ErrorActionPreference="stop"
+# $ErrorActionPreference="stop"
+Set-PSDebug -Trace 2
+echo $PSVersionTable.PSVersion
+
+cmake -h
 
 if ($proj -eq "all"){
     .\build.ps1 -proj pcre -init:$init -install:$install -arch $arch -config $config -static $static
@@ -68,15 +72,21 @@ if ($init) {
         $gen += " Win64"
     }
 
+    echo "making dir $dest"
+
     mkdir $dest -ErrorAction SilentlyContinue | Out-Null
     Push-Location $dest
+
+    echo "about to switch $proj"
 
     switch ($proj) {
         pcre {
             $BUILD_SHARED_LIBS = "ON"
             if ($static -eq "ON"){ $BUILD_SHARED_LIBS = "OFF"}
-            cmake -G "$gen" -DCMAKE_INSTALL_PREFIX="$PREFIX" -DPCRE_STATIC_RUNTIME="$static" -DBUILD_SHARED_LIBS="$BUILD_SHARED_LIBS" -DPCRE_BUILD_PCRECPP=OFF -DPCRE_BUILD_PCREGREP=OFF -DPCRE_BUILD_TESTS=OFF "../../pcre"
+            echo "about to cmake $proj in $pwd"
+            cmake -G "$gen" -DCMAKE_INSTALL_PREFIX="$PREFIX" -DPCRE_STATIC_RUNTIME="$static" -DBUILD_SHARED_LIBS="$BUILD_SHARED_LIBS" -DPCRE_BUILD_PCRECPP=OFF -DPCRE_BUILD_PCREGREP=OFF -DPCRE_BUILD_TESTS=OFF "../../pcre" *>> C:\projects\editorconfig-core-c\bin\pcre-build.log
             # -DPCRE_SUPPORT_JIT=ON -DPCRE_SUPPORT_UTF=ON -DPCRE_SUPPORT_UNICODE_PROPERTIES=ON
+            echo "cmake $proj finished"
         }
         core {
             $MSVC_MD = "ON"
