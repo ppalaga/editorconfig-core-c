@@ -18,7 +18,7 @@ $url = "https://ftp.pcre.org/pub/pcre/pcre-$($pcre).zip"
 $output = "$dest\pcre-$($pcre).zip"
 
 "Downloading pcre v$pcre sources" | Write-Host -ForegroundColor DarkGreen
-Start-BitsTransfer -Source $url -Destination $output
+Invoke-WebRequest -Uri $url -OutFile $output
 
 "Extracting pcre v$pcre sources" | Write-Host -ForegroundColor DarkGreen
 Expand-Archive -Path $output -DestinationPath $dest
